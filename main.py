@@ -57,6 +57,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def connect_signals(self):
         self.settings.view.chb_full_screen.toggled.connect(self.window_mode)
         self.lab2Widget.btn_start.clicked.connect(self.lab2Widget.processor)
+        self.lab3Widget.btn_start.clicked.connect(self.lab3Widget.processor)
 
     def window_mode(self, state: bool):
         if state:
