@@ -46,6 +46,7 @@ class Lab2Widget(QDockWidget, QWidget):
         # self.main_layout.addItem(spacerItem)
 
     def processor(self):
+        self.tab_widget_graphs.clear()
 
         # Reading dataframe about people's salary in different countries (age, years, salary: float64;  country: object)
         self.df = pd.read_csv('datasets/Salary.csv', usecols=['Age', 'Salary'])

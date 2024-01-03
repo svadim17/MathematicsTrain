@@ -49,6 +49,7 @@ class Lab3Widget(QDockWidget, QWidget):
         # self.main_layout.addItem(spacerItem)
 
     def processor(self):
+        self.tab_widget_graphs.clear()
 
         # read dataframe
         self.df = pd.read_csv('datasets/Diabetes_prediction.csv')

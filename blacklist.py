@@ -1,0 +1,6 @@
+plt.figure(figsize=(8,6))
+plt.scatter(x=data['x'], y=data['y'], s=50)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Unclustered data')
+plt.show()
