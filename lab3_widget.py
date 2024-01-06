@@ -32,8 +32,9 @@ class Lab3Widget(QDockWidget, QWidget):
         self.log_widget.setReadOnly(True)
         self.log_widget.setFontPointSize(14)
         self.log_widget.setMaximumHeight(250)
-        text = ('Laboratory 3: Bayesian Classifier\n\n\n'
-                'Algorithm created model that predict diabete by 8 parameters of people.')
+        text = ('Laboratory 3: Bayesian Classifier\n\n'
+                'Dataset: Diabetes prediction and parameters\n'
+                'Algorithm created model that predict diabete by 8 parameters of people')
         self.log_widget.setText(text)
 
         self.tab_widget_graphs = QTabWidget()

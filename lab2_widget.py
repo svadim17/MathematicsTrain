@@ -28,8 +28,8 @@ class Lab2Widget(QDockWidget, QWidget):
         self.log_widget.setReadOnly(True)
         self.log_widget.setFontPointSize(14)
         self.log_widget.setMaximumHeight(250)
-        text = 'Laboratory 2: Nonlinear Regression\n\n\n'
-        text += 'Dataset: People`s salary in different countries according to the age\n\n'
+        text = 'Laboratory 2: Nonlinear Regression\n\n'
+        text += 'Dataset: People`s salary in different countries according to the age\n'
         text += f'Polinom`s degree: {self.polinom_degree}'
         self.log_widget.setText(text)
 

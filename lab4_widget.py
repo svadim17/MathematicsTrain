@@ -34,8 +34,9 @@ class Lab4Widget(QDockWidget, QWidget):
         self.log_widget.setReadOnly(True)
         self.log_widget.setFontPointSize(14)
         self.log_widget.setMaximumHeight(250)
-        text = ('Laboratory 4: Cluster analysis (K-means)\n\n\n'
-                'text')
+        text = ('Laboratory 4: Cluster analysis (K-means)\n\n'
+                'Dataset: Social network ads\n'
+                'Number of clusters = 3')
         self.log_widget.setText(text)
 
         self.tab_widget_graphs = QTabWidget()
