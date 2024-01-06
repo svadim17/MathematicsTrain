@@ -35,7 +35,7 @@ class Lab5Widget(QDockWidget, QWidget):
         self.log_widget.setFontPointSize(14)
         self.log_widget.setMaximumHeight(250)
         text = ('Laboratory 5: Decision trees\n\n'
-                'Dataset: ')
+                'Dataset: Peoples`s parameters that have or not laptops')
         self.log_widget.setText(text)
 
         self.tab_widget_graphs = QTabWidget()
@@ -53,7 +53,7 @@ class Lab5Widget(QDockWidget, QWidget):
     def processor(self):
         self.tab_widget_graphs.clear()
 
-        # self.dataset = pd.read_csv('datasets/Social_Network_Ads.csv')
+        self.dataset = pd.read_csv('datasets/Laptop_Users.csv')
 
     def add_graphs_to_widget(self, fig):
         """ This function adds graph to widget """
