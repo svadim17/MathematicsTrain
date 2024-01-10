@@ -1,3 +1,4 @@
+import sklearn.metrics
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import *
@@ -11,6 +12,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
+from sklearn import tree
+from sklearn.metrics import confusion_matrix
 from sklearn.naive_bayes import GaussianNB
 from sklearn import metrics
 from sklearn.cluster import KMeans
@@ -54,6 +57,74 @@ class Lab5Widget(QDockWidget, QWidget):
         self.tab_widget_graphs.clear()
 
         self.dataset = pd.read_csv('datasets/Laptop_Users.csv')
+        X = self.dataset.drop(labels='Has Laptop', axis=1)        # remove column 'Has Laptop'
+        X, factorization_table = self.factorization(dataset=X, columns_for_factorization=['Gender', 'Region', 'Occupation'])
+
+        # Checking for originality of features and their correlation
+        fig1, ax1 = plt.subplots()
+        sns.heatmap(round(abs(X.corr()), 1), annot=True)
+        ax1.set_title('Checking for originality of features and their correlation')
+        self.add_graphs_to_widget(fig1)
+
+        # Split dataset
+        train_input, test_input, train_output, test_output = train_test_split(X, self.dataset['Has Laptop'], test_size=0.2)
+        print("Shape of train_input:", train_input.shape)
+        print("Shape of test_input:", test_input.shape)
+        print("Shape of train_output:", train_output.shape)
+        print("Shape of test_output:", test_output.shape)
+        # Build model of tree decision
+        self.model = tree.DecisionTreeClassifier()
+        self.model.fit(train_input, train_output)
+
+        predictions = self.model.predict(test_input)
+        print(predictions)
+
+        confusion_matrix = sklearn.metrics.confusion_matrix(predictions, test_output)
+
+        fig2, ax2 = plt.subplots()
+        sns.heatmap(confusion_matrix, annot=True)
+        ax2.set_title('Confusion matrix')
+        self.add_graphs_to_widget(fig2)
+
+        # Get decision tree
+        fig3, ax3 = plt.subplots()
+        tree.plot_tree(self.model)
+        ax2.set_title('Decision Tree')
+        self.add_graphs_to_widget(fig3)
+
+        self.custom_test_tree()
+        # print(self.dataset.head())
+
+    def factorization(self, dataset, columns_for_factorization: list):
+        factorization_table = {}
+        for column in dataset.columns:
+            if column in columns_for_factorization:
+                dataset[column], table = pd.factorize(dataset[column])
+                factorization_table[column] = pd.DataFrame(columns=[column], data=table)
+        return dataset, factorization_table
+
+    def custom_test_tree(self):
+        """ Example:
+           Age  Gender       Region Occupation  Income
+           'int' 'str'       'str'    'str'      'int'
+           14    male         city    student       0
+           34  female         city    teacher   22000
+           42    male  countryside     banker   24000
+           30    male  countryside    teacher   25000
+           16    male         city    student       0 """
+        df = {
+            'Age': [23],
+            'Gender': ['male'],
+            'Region': ['city'],
+            'Occupation': ['student'],
+            'Income': [10000]
+        }
+
+        custom_df = pd.DataFrame(df)
+
+        custom_df_factor, _ = self.factorization(custom_df, columns_for_factorization=['Gender', 'Region', 'Occupation'])
+        custom_prediction = self.model.predict(custom_df_factor)
+        self.log_widget.append(f'\nPrediction on this dataset is: "{custom_prediction[0]} laptop"\n{df} ')
 
     def add_graphs_to_widget(self, fig):
         """ This function adds graph to widget """
