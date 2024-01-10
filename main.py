@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
 from settings import SettingsWidget
+from lab1_widget import Lab1Widget
 from lab2_widget import Lab2Widget
 from lab3_widget import Lab3Widget
 from lab4_widget import Lab4Widget
@@ -17,6 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.settings = SettingsWidget()
         self.create_action()
         self.create_toolbar()
+        self.init_lab1Widget()
         self.init_lab2Widget()
         self.init_lab3Widget()
         self.init_lab4Widget()
@@ -49,9 +51,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.addToolBar(Qt.LeftToolBarArea, self.toolbar)
 
+    def init_lab1Widget(self):
+        self.lab1Widget = Lab1Widget()
+        self.addDockWidget(Qt.RightDockWidgetArea, self.lab1Widget)
+
     def init_lab2Widget(self):
         self.lab2Widget = Lab2Widget()
         self.addDockWidget(Qt.RightDockWidgetArea, self.lab2Widget)
+        self.tabifyDockWidget(self.lab1Widget, self.lab2Widget)
 
     def init_lab3Widget(self):
         self.lab3Widget = Lab3Widget()
@@ -74,6 +81,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.lab3Widget.btn_start.clicked.connect(self.lab3Widget.processor)
         self.lab4Widget.btn_start.clicked.connect(self.lab4Widget.processor)
         self.lab5Widget.btn_start.clicked.connect(self.lab5Widget.processor)
+        self.lab1Widget.btn_start.clicked.connect(self.lab1Widget.processor)
 
     def window_mode(self, state: bool):
         if state:
