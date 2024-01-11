@@ -1,33 +1,32 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+def processor(self):
+    self.dataset = pd.read_csv('datasets/Gold_data.csv')
+    df = self.dataset.drop(labels=['Open', 'High', 'Low'], axis=1)  # remove columns
+    df['Date'] = pd.to_datetime(df['Date'])  # convert 'Date' to date format
 
-# Ваш исходный датасет
-data = {'Age': [14, 34, 42, 30, 16],
-        'Gender': ['male', 'female', 'male', 'male', 'male'],
-        'Region': ['city', 'city', 'countryside', 'countryside', 'city'],
-        'Occupation': ['student', 'teacher', 'banker', 'teacher', 'student'],
-        'Income': [0, 22000, 24000, 25000, 0],
-        'Has Laptop': ['no', 'no', 'yes', 'no', 'no']}
+    # Convert to pandas.series
+    df_series = pd.Series(df['Price'].values, index=df['Date'])
 
-df = pd.DataFrame(data)
+    # Plot every 10 element of dataframe
+    df.set_index('Date', inplace=True)  # set 'Date' column as indexes
+    self.plot_input_data(data=df)
 
-# Разделяем на признаки (X) и целевую переменную (y)
-X = df.drop('Has Laptop', axis=1)
-y = df['Has Laptop']
+    # Split dataframe on train and test frames
+    train_size = int(len(df_series) * 0.8)
+    train = df_series.iloc[:train_size]
+    test = df_series.iloc[train_size:]
 
-# Применяем факторизацию от pandas
-X_encoded = pd.get_dummies(X, columns=['Gender', 'Region', 'Occupation'])
+    # Apply Holt-Winters method
+    model = ExponentialSmoothing(train, trend='add', seasonal='add', seasonal_periods=7).fit()
 
-# Разбиваем данные на обучающую и тестовую выборки
-X_train, X_test, y_train, y_test = train_test_split(X_encoded, y, test_size=0.2, random_state=42)
+    # Get predictions
+    predictions = model.forecast(len(test))
+    print(test, predictions)
 
-# Создаем модель дерева решений
-model = DecisionTreeClassifier(random_state=42)
-
-# Обучаем модель
-model.fit(X_train, y_train)
-
-# Оцениваем точность модели
-accuracy = model.score(X_test, y_test)
-print(f'Accuracy: {accuracy}')
+    # Visualize predictions
+    fig, ax = plt.subplots()
+    plt.plot(train, label='Train')
+    plt.plot(test.index, test, label='Test')  # Use test.index to ensure correct alignment
+    plt.plot(test.index, predictions, label='Predictions')  # Use test.index to ensure correct alignment
+    plt.title('Gold price predictions using Holt-Winters')
+    plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
+    self.add_graphs_to_widget(fig)

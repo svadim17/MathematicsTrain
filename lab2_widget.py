@@ -157,3 +157,6 @@ class Lab2Widget(QDockWidget, QWidget):
         text = f'Mean Squared Error = {mse}\n'
         text += f'Equation: {equation}'
         self.log_widget.setText(text)
+
+
+
