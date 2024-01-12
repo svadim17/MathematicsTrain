@@ -95,6 +95,31 @@ class Lab1Widget(QDockWidget, QWidget):
         print(f'R2_score = {round(r2, 4)}')
         self.log_widget.append(f'R2_score = {round(r2, 4)}')
 
+        # Forecast future
+        future_periods = 200
+        last_test_date = test.index[-1]
+        future_index = pd.date_range(start=last_test_date, periods=future_periods, freq='D')
+        future_predictions = model.forecast(steps=future_periods)
+        future_predictions.index = future_index
+
+        # # Visualize future predictions
+        # fig3, ax3 = plt.subplots()
+        # plt.plot(df_series, label='Actual data')
+        # plt.plot(future_predictions, label='Future predictions')
+        # plt.title('Gold price with actual data and future predictions')
+        # plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
+        # self.add_graphs_to_widget(fig3)
+
+        # Визуализация предсказаний
+        fig3, ax3 = plt.subplots()
+        plt.plot(train, label='Train')
+        plt.plot(test.index, test, label='Test')
+        plt.plot(predictions.index, predictions, label='Predictions')
+        plt.plot(future_predictions.index, future_predictions, label='Future Predictions', linestyle='dashed')
+        plt.title('Gold price predictions using Holt-Winters')
+        plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
+        self.add_graphs_to_widget(fig3)
+
     def add_graphs_to_widget(self, fig):
         """ This function adds graph to widget """
         canvas = FigureCanvas(fig)
