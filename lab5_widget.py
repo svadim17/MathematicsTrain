@@ -1,22 +1,11 @@
 import sklearn.metrics
-from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import numpy as np
 import pandas as pd
 import seaborn as sns       # for create custom graphs
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
 from sklearn import tree
-from sklearn.metrics import confusion_matrix
-from sklearn.naive_bayes import GaussianNB
-from sklearn import metrics
-from sklearn.cluster import KMeans
 
 
 class Lab5Widget(QDockWidget, QWidget):

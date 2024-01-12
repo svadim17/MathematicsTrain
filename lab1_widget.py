@@ -1,24 +1,9 @@
-import sklearn.metrics
-from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import numpy as np
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-import seaborn as sns       # for create custom graphs
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import train_test_split
-from sklearn import tree
-from sklearn.metrics import confusion_matrix
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.naive_bayes import GaussianNB
-from sklearn import metrics
-from sklearn.cluster import KMeans
 
 
 class Lab1Widget(QDockWidget, QWidget):
@@ -134,5 +119,3 @@ class Lab1Widget(QDockWidget, QWidget):
         plt.title('Gold price time series')
         plt.xlabel('Date'), plt.ylabel('Price')
         self.add_graphs_to_widget(fig)
-
-

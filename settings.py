@@ -1,10 +1,8 @@
 import yaml
-from PyQt5.QtWidgets import QTabWidget, QVBoxLayout, QHBoxLayout, QLabel, QComboBox, QApplication, \
-    QGridLayout, QSlider, QPushButton, QDoubleSpinBox, QSpacerItem, QSizePolicy, QAbstractSpinBox, QCheckBox, \
-    QSpinBox, QTableWidget, QTableWidgetItem, QCalendarWidget, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QLabel, QComboBox, QApplication, \
+    QGridLayout, QPushButton, QSpacerItem, QSizePolicy, QCheckBox, QWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTabWidget
-from PyQt5.QtGui import QIcon, QColor
 from qt_material import QtStyleTools, list_themes
 from loguru import logger
 

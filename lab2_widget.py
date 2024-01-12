@@ -1,7 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np
@@ -157,6 +154,3 @@ class Lab2Widget(QDockWidget, QWidget):
         text = f'Mean Squared Error = {mse}\n'
         text += f'Equation: {equation}'
         self.log_widget.setText(text)
-
-
-
