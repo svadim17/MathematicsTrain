@@ -15,6 +15,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.naive_bayes import GaussianNB
 from sklearn import metrics
 from sklearn.cluster import KMeans
@@ -78,16 +79,36 @@ class Lab1Widget(QDockWidget, QWidget):
 
         # Get predictions
         predictions = model.forecast(len(test))
+        predictions.index = test.index
 
         # Visualize predictions
-        fig, ax = plt.subplots()
+        fig1, ax1 = plt.subplots()
         plt.plot(train, label='Train')
         plt.plot(test.index, test, label='Test')
         plt.plot(test.index, predictions, label='Predictions')
         plt.title('Gold price predictions using Holt-Winters')
         plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
-        self.add_graphs_to_widget(fig)
+        self.add_graphs_to_widget(fig1)
 
+        # Calculate difference between test and predictions data
+        difference = predictions - test
+
+        # Visualize difference
+        fig2, ax2 = plt.subplots()
+        plt.plot(difference, label='Difference')
+        plt.title('Difference between test data and predictions')
+        plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
+        self.add_graphs_to_widget(fig2)
+
+        # Calculate MSE
+        mse = mean_squared_error(test, predictions)
+        print(f'\nMean Squared Error = {round(mse, 4)}')
+        self.log_widget.append(f'Mean Squared Error = {round(mse, 4)}')
+
+        # Calculate R2_score
+        r2 = r2_score(test, predictions)
+        print(f'R2_score = {round(r2, 4)}')
+        self.log_widget.append(f'R2_score = {round(r2, 4)}')
 
     def add_graphs_to_widget(self, fig):
         """ This function adds graph to widget """
