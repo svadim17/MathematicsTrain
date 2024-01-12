@@ -102,21 +102,13 @@ class Lab1Widget(QDockWidget, QWidget):
         future_predictions = model.forecast(steps=future_periods)
         future_predictions.index = future_index
 
-        # # Visualize future predictions
-        # fig3, ax3 = plt.subplots()
-        # plt.plot(df_series, label='Actual data')
-        # plt.plot(future_predictions, label='Future predictions')
-        # plt.title('Gold price with actual data and future predictions')
-        # plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
-        # self.add_graphs_to_widget(fig3)
-
-        # Визуализация предсказаний
+        # Visualize future predictions
         fig3, ax3 = plt.subplots()
         plt.plot(train, label='Train')
         plt.plot(test.index, test, label='Test')
         plt.plot(predictions.index, predictions, label='Predictions')
-        plt.plot(future_predictions.index, future_predictions, label='Future Predictions', linestyle='dashed')
-        plt.title('Gold price predictions using Holt-Winters')
+        plt.plot(future_predictions.index, future_predictions, label='Future Predictions')
+        plt.title('Gold price with future predictions')
         plt.xlabel('Date'), plt.ylabel('Price'), plt.legend()
         self.add_graphs_to_widget(fig3)
 
