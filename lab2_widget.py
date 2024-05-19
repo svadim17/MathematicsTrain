@@ -7,6 +7,7 @@ import seaborn as sns       # for create custom graphs
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
+import time
 
 
 class Lab2Widget(QDockWidget, QWidget):
@@ -46,9 +47,13 @@ class Lab2Widget(QDockWidget, QWidget):
         self.tab_widget_graphs.clear()
 
         # Reading dataframe about people's salary in different countries (age, years, salary: float64;  country: object)
+        print('Reading dataset...')
+        start_time = time.time()
         self.df = pd.read_csv('datasets/Salary.csv', usecols=['Age', 'Salary'])
         # df = pd.read_csv('datasets/Salary.csv', usecols=['Age', 'Years of Experience', 'Salary', 'Country'])
+        print(f'Time to read dataset: {time.time() - start_time}')
         self.df = self.df.head(6000)  # choose first 6000 rows
+        print(self.df.head(10))
 
         # Plot dependency graph from input data
         fig1, ax1 = plt.subplots()
@@ -64,7 +69,10 @@ class Lab2Widget(QDockWidget, QWidget):
         # Create Model
         DEGREE = self.polinom_degree  # polinom's degree
         regression = make_pipeline(PolynomialFeatures(DEGREE), LinearRegression())
+        print('Training the model...')
+        start_time = time.time()
         regression.fit(age, salary)
+        print(f'Time to train model: {time.time() - start_time}')
         predictions = regression.predict(age)
         MSE = np.sqrt(np.mean((predictions - salary) ** 2))
         print(f'Mean squared error = {MSE}')

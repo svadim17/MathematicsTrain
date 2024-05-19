@@ -6,6 +6,7 @@ import seaborn as sns       # for create custom graphs
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn import metrics
+import time
 
 
 class Lab3Widget(QDockWidget, QWidget):
@@ -46,15 +47,18 @@ class Lab3Widget(QDockWidget, QWidget):
         self.tab_widget_graphs.clear()
 
         # read dataframe
+        print('Reading dataset...')
+        start_time = time.time()
         self.df = pd.read_csv('datasets/Diabetes_prediction.csv')
         self.df = self.df.head(100000)
+        print(f'Time to read dataset: {time.time() - start_time}')
+        print(self.df.head(10))
 
         # factorization (to convert string data types to numeric)
-        for column in self.df:
-            if type(self.df[column][0]) is str:
-                self.df[column] = pd.factorize(self.df[column])[0]
-
+        print('Factorization (converting string data types to numeric)...')
+        start_time = time.time()
         self.df = self.factorization(dataframe=self.df)
+        print(f'Time to factorization: {time.time() - start_time}')
 
         # Checking data for multicollinearity
         fig1, ax1 = plt.subplots()
@@ -65,7 +69,10 @@ class Lab3Widget(QDockWidget, QWidget):
         # Create model
         train_input, test_input, train_output, test_output = self.split_dataset(dataset=self.df)    # splitting
         self.model = GaussianNB()
+        print('Training the model...')
+        start_time = time.time()
         self.model.fit(train_input, train_output)
+        print(f'Time to train model: {time.time() - start_time}')
 
         predictions = self.model.predict(test_input)
         accuracy = metrics.accuracy_score(predictions, test_output)

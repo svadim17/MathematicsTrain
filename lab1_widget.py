@@ -1,3 +1,5 @@
+import time
+
 from PyQt5.QtWidgets import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -41,10 +43,14 @@ class Lab1Widget(QDockWidget, QWidget):
         # self.main_layout.addItem(spacerItem)
 
     def processor(self):
+        print('Reading dataset...')
+        start_time = time.time()
         self.dataset = pd.read_csv('datasets/Gold_data.csv')
+        print(f'Time to read dataset: {time.time() - start_time}')
         df = self.dataset.drop(labels=['Open', 'High', 'Low'], axis=1)      # remove columns
         df = df.sort_index(ascending=False)
         df['Date'] = pd.to_datetime(df['Date'])           # convert 'Date' to date format
+        print(df.head(10))
 
         # Convert to pandas.series
         df_series = pd.Series(df['Price'].values, index=df['Date'])
@@ -54,13 +60,21 @@ class Lab1Widget(QDockWidget, QWidget):
         self.plot_input_data(data=df)
 
         # Split dataframe on train and test frames
+        print('Splitting dataset...')
+        start_time = time.time()
         train_size = int(len(df_series) * 0.9)
         train = df_series.iloc[:train_size]
         test = df_series.iloc[train_size:]
+        print(f'Time to split dataset: {time.time() - start_time}')
+        print("Shape of train:", train.shape)
+        print("Shape of test:", test.shape)
 
         # Apply Holt-Winters method
+        print('Training the model...')
+        start_time = time.time()
         exp_smooth = ExponentialSmoothing(train, trend='mul', seasonal='mul', seasonal_periods=730)
         model = exp_smooth.fit(smoothing_level=0.1, smoothing_seasonal=0.1)
+        print(f'Time to train model: {time.time() - start_time}')
 
         # Get predictions
         predictions = model.forecast(len(test))

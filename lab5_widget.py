@@ -6,6 +6,7 @@ import pandas as pd
 import seaborn as sns       # for create custom graphs
 from sklearn.model_selection import train_test_split
 from sklearn import tree
+import time
 
 
 class Lab5Widget(QDockWidget, QWidget):
@@ -45,9 +46,17 @@ class Lab5Widget(QDockWidget, QWidget):
     def processor(self):
         self.tab_widget_graphs.clear()
 
+        print('Reading dataset...')
+        start_time = time.time()
         self.dataset = pd.read_csv('datasets/Laptop_Users.csv')
         X = self.dataset.drop(labels='Has Laptop', axis=1)        # remove column 'Has Laptop'
+        print(f'Time to read dataset: {time.time() - start_time}')
+        print(X.head(10))
+
+        print('Factorization (converting string data types to numeric)...')
+        start_time = time.time()
         X, factorization_table = self.factorization(dataset=X, columns_for_factorization=['Gender', 'Region', 'Occupation'])
+        print(f'Time to factorization: {time.time() - start_time}')
 
         # Checking for originality of features and their correlation
         fig1, ax1 = plt.subplots()
@@ -56,14 +65,21 @@ class Lab5Widget(QDockWidget, QWidget):
         self.add_graphs_to_widget(fig1)
 
         # Split dataset
+        print('Splitting dataset...')
+        start_time = time.time()
         train_input, test_input, train_output, test_output = train_test_split(X, self.dataset['Has Laptop'], test_size=0.2)
+        print(f'Time to split dataset: {time.time() - start_time}')
         print("Shape of train_input:", train_input.shape)
         print("Shape of test_input:", test_input.shape)
         print("Shape of train_output:", train_output.shape)
         print("Shape of test_output:", test_output.shape)
+
         # Build model of tree decision
         self.model = tree.DecisionTreeClassifier()
+        print('Training the model...')
+        start_time = time.time()
         self.model.fit(train_input, train_output)
+        print(f'Time to train model: {time.time() - start_time}')
 
         predictions = self.model.predict(test_input)
         print(predictions)

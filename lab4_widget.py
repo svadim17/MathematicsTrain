@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import pandas as pd
 from sklearn.cluster import KMeans
+import time
 
 
 class Lab4Widget(QDockWidget, QWidget):
@@ -43,8 +44,12 @@ class Lab4Widget(QDockWidget, QWidget):
     def processor(self):
         self.tab_widget_graphs.clear()
 
+        print('Reading dataset...')
+        start_time = time.time()
         self.dataset = pd.read_csv('datasets/Social_Network_Ads.csv')
         df = self.dataset.drop(self.dataset.columns[-1], axis=1)     # remove last column (axis=1 means that it is column)
+        print(f'Time to read dataset: {time.time() - start_time}')
+        print(df.head(10))
 
         # Plot unclustered dataframe
         fig1, ax1 = plt.subplots(1, 1)
@@ -72,7 +77,10 @@ class Lab4Widget(QDockWidget, QWidget):
         # Create model
         clusters_number = 3
         self.model = KMeans(n_clusters=clusters_number)
+        print('Training the model...')
+        start_time = time.time()
         self.model.fit(df[['Age']])
+        print(f'Time to train model: {time.time() - start_time}')
 
         labels = self.model.labels_     # get cluster labels for every data point
         df['Cluster'] = labels          # add cluster labels to dataframe
